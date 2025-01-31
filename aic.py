@@ -39,16 +39,18 @@ def construct_request(api, page='', limit='', artwork_id=''):
     request = f"{api}{artwork_id or ''}{params or ''}"
     return request
 
-# ALREADY_SEEN
-# This function creates and checks the save file
+# GET_SEEN
+# This function returns the contents of saved in the file. 
 def get_seen():
     with open(SAVE_FILE, 'rt') as file:
         seen_ids = set(file.readlines())
         return seen_ids
 
+# SAVE_SEEN
+# This function appends the given artwork_id to the local save file.
 def save_seen(artwork_id):
     with open(SAVE_FILE, 'a') as file:
-        file.write(str(artwork_id))
+        file.write(f'{artwork_id}\n')
 
 # INIT THE REQUEST
 # Create a random ID
