@@ -49,9 +49,15 @@ def create_random_id():
     else:
         create_random_id()
 
-random_id = create_random_id()
-print(random_id)
-url = construct_request(AIC_API_URL, 1, 1, random_id)
-print(url)
-data = get_data(url)
-print(data)
+# GET_ARTWORK
+# Generates a random ID and requests it
+# If 404, generates a new ID and requests it
+def get_artwork():
+    random_id = create_random_id()
+    print(random_id)
+    url = construct_request(AIC_API_URL, 1, 1, random_id)
+    print(url)
+    data = get_data(url)
+    print(data)
+
+get_artwork()
