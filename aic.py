@@ -55,9 +55,9 @@ def save_seen(artwork_id):
 # INIT THE REQUEST
 # Create a random ID
 # Check if it's been shown before
-def create_random_id():
+def create_random_id(already_seen):
     random_id = random.randrange(1, COLLECTION_SIZE)
-    if random_id not in get_seen():
+    if random_id not in already_seen:
         save_seen(random_id)
         return random_id
     else:
@@ -66,8 +66,8 @@ def create_random_id():
 # GET_ARTWORK
 # Generates a random ID and requests it
 # If 404, generates a new ID and requests it
-def get_artwork():
-    random_id = create_random_id()
+def get_artwork(already_seen):
+    random_id = create_random_id(already_seen)
     url = construct_request(AIC_API_URL, 1, 1, random_id)
     response = get_data(url)
     return response
@@ -86,8 +86,10 @@ def parse_artwork(data):
 def main():
     if not os.path.exists(SAVE_FILE):
         save_seen('')
-    data = get_artwork()
-    parse_artwork(data)
+    already_seen = get_seen()
+    data = get_artwork(already_seen)
+    if data != 404:
+        parse_artwork(data)
 
 if __name__ == '__main__':
     main()
