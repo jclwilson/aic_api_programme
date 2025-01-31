@@ -59,5 +59,9 @@ def get_artwork():
     print(url)
     data = get_data(url)
     print(data)
+    if data == 404:
+        get_artwork()
+    else:
+        return data
 
 get_artwork()
