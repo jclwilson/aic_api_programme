@@ -6,6 +6,7 @@ import random
 # Constants
 AIC_API_URL = "https://api.artic.edu/api/v1/artworks"
 COLLECTION_SIZE = 99999
+FIELDS = ['has_not_been_viewed_much', 'exhibition_history', 'alt_text', 'api_link', 'title', 'date_display', 'artist_display', 'date_start', 'date_end']
 
 previous_works = set()
 page = 1
@@ -54,14 +55,21 @@ def create_random_id():
 # If 404, generates a new ID and requests it
 def get_artwork():
     random_id = create_random_id()
-    print(random_id)
     url = construct_request(AIC_API_URL, 1, 1, random_id)
-    print(url)
-    data = get_data(url)
-    print(data)
-    if data == 404:
-        get_artwork()
-    else:
-        return data
+    response = get_data(url)
+    return response
 
-get_artwork()
+# PARSE_ARTWORK
+# This function accepts json data representing one artwork and parses the fields.
+# It prints the info to the terminal.
+def parse_artwork(data):
+    # I am running into errors if this runs after a 404 error. Need to check this.
+    for key, value in data['data'].items():
+        if key in FIELDS:
+            print(f"{key} = {value}")
+
+data = get_artwork()
+if data == 404:
+    get_artwork()
+else:
+    parse_artwork(data)
