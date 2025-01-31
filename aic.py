@@ -68,8 +68,11 @@ def parse_artwork(data):
         if key in FIELDS:
             print(f"{key} = {value}")
 
-data = get_artwork()
-if data == 404:
-    get_artwork()
-else:
+# The main function runs when directly called, and not when the file is [imported as part of a module.](https://www.digitalocean.com/community/tutorials/python-main-function)
+
+def main():
+    data = get_artwork()
     parse_artwork(data)
+
+if __name__ == '__main__':
+    main()
