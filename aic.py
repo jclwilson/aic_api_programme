@@ -1,10 +1,13 @@
 import json
 import urllib.request
 import urllib.error
+import random
 
 # Constants
 AIC_API_URL = "https://api.artic.edu/api/v1/artworks"
+COLLECTION_SIZE = 99999
 
+previous_works = set()
 page = 1
 limit = 10 # MUST be lower than 100
 
@@ -33,8 +36,22 @@ def construct_request(api, page='', limit='', artwork_id=''):
         params = f"?{page}&{limit}"
     request = f"{api}{artwork_id or ''}{params or ''}"
     return request
+ 
+# INIT THE REQUEST
+# Create a random ID
+# Check if it's been shown before
 
-url = construct_request(AIC_API_URL, 1, 1, 12345)
+def create_random_id():
+    random_id = random.randrange(1, COLLECTION_SIZE)
+    if random_id not in previous_works:
+        previous_works.add(random_id)
+        return random_id
+    else:
+        create_random_id()
+
+random_id = create_random_id()
+print(random_id)
+url = construct_request(AIC_API_URL, 1, 1, random_id)
 print(url)
 data = get_data(url)
 print(data)
