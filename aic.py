@@ -7,8 +7,8 @@ import os
 # Constants
 AIC_API_URL = "https://api.artic.edu/api/v1/artworks"
 COLLECTION_SIZE = 99999
-FIELDS = ['has_not_been_viewed_much', 'exhibition_history', 'alt_text', 'api_link', 'title', 'date_display', 'artist_display', 'date_start', 'date_end']
 SAVE_FILE = 'already_seen.txt'
+FIELDS = ['has_not_been_viewed_much', 'exhibition_history', 'description', 'api_link', 'title', 'date_display', 'date_start', 'date_end', 'is_on_view', 'gallery_title', 'artwork_type_title', 'artist_title']
 
 page = 1
 limit = 10 # MUST be lower than 100
@@ -76,8 +76,15 @@ def get_artwork(already_seen):
 # This function accepts json data representing one artwork and parses the fields.
 # It prints the info to the terminal.
 def parse_artwork(data):
-    # I am running into errors if this runs after a 404 error. Need to check this.
-    for key, value in data['data'].items():
+    artwork = data['data']
+    print(f"This {artwork['artwork_type_title']} titled '{artwork['title']}' is by {artwork['artist_title']}. It was made in {artwork['date_display']}.")
+    if artwork['description']:
+        print(f"{artwork['description']}")
+    if artwork['has_not_been_viewed_much'] == True:
+        if artwork['is_on_view'] == True:
+            print(f"It is on view in the {artwork['gallery_title']}")
+    print('### DETAILS ###')
+    for key, value in artwork.items():
         if key in FIELDS:
             print(f"{key} = {value}")
 
